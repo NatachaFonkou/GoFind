@@ -21,7 +21,7 @@ import { VehiclesModule } from "./vehicles/vehicles.module";
     }),
     MongooseModule.forRoot(
       // 'mongodb://localhost:27017/<db_name>',
-      "mongodb+srv://pacomekengali:6pNI6P5GEOckU64m@gofind.x8dv0y1.mongodb.net/?retryWrites=true&w=majority&appName=GoFind",
+      process.env.MONGO_DB_URI,
     ),
 
     MongooseModule.forFeature([]),
