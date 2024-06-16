@@ -1,10 +1,12 @@
 import {
   BadRequestException,
+  ConflictException,
   Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
+import { OfferDocument } from "src/offers/entities/offer.entity";
 import { IOffersRepository } from "src/offers/interfaces/offers.repository.interface";
 import { CreateOfferCandidateDto } from "./dto/create-offer-candidate.dto";
 import { UpdateOfferCandidateDto } from "./dto/update-offer-candidate.dto";
@@ -67,11 +69,39 @@ export class OfferCandidatesService implements IOfferCandidatesService {
     return this.offerCandidateRepository.findOne(id);
   }
 
-  update(
+  async update(
     id: string,
     candidate: number,
     updateOfferCandidateDto: UpdateOfferCandidateDto,
   ): Promise<OfferCandidate> {
+    const offerCandidature = await this.offerCandidateRepository.findOne(
+      id,
+      true,
+    );
+
+    if (!offerCandidature) throw new NotFoundException("L'offre n'exsite pas");
+
+    const supplementaryPlaces =
+      updateOfferCandidateDto.places - offerCandidature.places;
+    if (updateOfferCandidateDto.places && supplementaryPlaces > 0) {
+      const candidatures = await this.offerCandidateRepository.findAll({
+        offer: offerCandidature.offer as string,
+      });
+
+      const takenPLaces = candidatures
+        .map((candidature) => candidature.places)
+        .reduce((a, b) => a + b);
+
+      if (
+        takenPLaces + supplementaryPlaces >
+        (offerCandidature.offer as OfferDocument).places
+      ) {
+        throw new ConflictException(
+          "Il ne reste pas assez de place pour cette candidature",
+        );
+      }
+    }
+
     return this.offerCandidateRepository.update(id, updateOfferCandidateDto);
   }
 
