@@ -1,7 +1,4 @@
-<p align="center">
- ![Image] (https://github.com/NatachaFonkou/GoFind/blob/car-sharing/POO-Structure.drawio.png)
-  <a href="http://nestjs.com/" target="blank"><img src="https://github.com/NatachaFonkou/GoFind/blob/car-sharing/POO-Structure.drawio.png" width="200" alt="Nest Logo" /></a>
-</p>
+![Image](https://github.com/NatachaFonkou/GoFind/blob/car-sharing/POO-Structure.drawio.png)
 
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
